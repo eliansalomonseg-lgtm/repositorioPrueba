@@ -255,33 +255,73 @@
 
             <div class="form-step" id="step-5">
                 <div class="section-title">Paso 5: Información de la Luz Eléctrica (CFE)</div>
-                <p class="instruccion-seccion">Tenga a la mano un recibo de luz reciente y una fotografía de la escuela.</p>
+                <p class="instruccion-seccion">Ingrese los números RPU (Servicios de Luz) de la escuela. Puede registrar más de uno si es necesario.</p>
                 
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <label class="form-label">Número RPU (12 dígitos) *</label>
-                        <input type="text" name="rpu" class="form-control" placeholder="Ej. 012345678901 (12 dígitos)" required maxlength="12" minlength="12" inputmode="numeric" pattern="[0-9]*">
+                <!-- Sección de Carga Rápida (Colapsada por defecto) -->
+                <div id="bulk-paste-container" class="bulk-paste-box mb-4 d-none">
+                    <h5 class="bulk-title">
+                        <span class="bulk-icon">&#9889;</span> Carga Rápida Multiservicio (Pegar RPUs)
+                    </h5>
+                    <p class="bulk-help">Pegue uno o varios números RPU de 12 dígitos (separados por espacios, comas o saltos de línea):</p>
+                    <textarea id="bulk-rpu-input" class="form-control mb-3" rows="3" placeholder="Ej. 012345678901, 987654321098, 111122223333" style="text-transform: none;"></textarea>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-sm btn-secondary me-2" id="btn-cancel-bulk">Cancelar</button>
+                        <button type="button" class="btn btn-sm btn-seg-guardar-min" id="btn-apply-bulk">Cargar Servicios</button>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Estatus del servicio del RPU *</label>
-                        <select name="estatus_rpu" class="form-select" required>
-                            <option value="">-- SELECCIONE --</option>
-                            <option value="ACTIVO">ACTIVO</option>
-                            <option value="SUSPENDIDO">SUSPENDIDO</option>
-                            <option value="SIN CONTRATO">SIN CONTRATO</option>
-                            <option value="EN PROCESO">EN PROCESO</option>
-                        </select>
+                </div>
+
+                <!-- Lista de RPUs Dinámica -->
+                <div class="rpu-section-header d-flex justify-content-between align-items-center mb-3">
+                    <span class="rpu-section-title">Servicios de Luz Registrados</span>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn-seg-carga-masiva-toggle" id="btn-toggle-bulk">
+                            &#9889; Ingreso Rápido
+                        </button>
+                        <button type="button" class="btn-seg-agregar-rpu" id="btn-add-rpu">
+                            + Agregar Servicio
+                        </button>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Foto de la Fachada *</label>
-                        <input type="file" name="foto_fachada" class="form-control" accept="image/*" required>
+                </div>
+
+                <div id="rpu-list-container" class="mb-4">
+                    <!-- Fila Principal (Obligatoria) -->
+                    <div class="rpu-row row g-3 mb-3 align-items-end" data-index="0">
+                        <div class="col-md-5">
+                            <label class="form-label">Número RPU (12 dígitos) *</label>
+                            <input type="text" name="rpu[]" class="form-control rpu-input" placeholder="Ej. 012345678901 (12 dígitos)" required maxlength="12" minlength="12" inputmode="numeric" pattern="[0-9]*">
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Estatus del servicio del RPU *</label>
+                            <select name="estatus_rpu[]" class="form-select" required>
+                                <option value="">-- SELECCIONE --</option>
+                                <option value="ACTIVO" selected>ACTIVO</option>
+                                <option value="SUSPENDIDO">SUSPENDIDO</option>
+                                <option value="SIN CONTRATO">SIN CONTRATO</option>
+                                <option value="EN PROCESO">EN PROCESO</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <button type="button" class="btn-seg-eliminar-rpu w-100" disabled title="El servicio principal no se puede eliminar">
+                                Quitar
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="preview-box">
-                            <img id="vista-previa-img" src="#" alt="Foto seleccionada" style="max-width: 100%; height: auto; display: none; border-radius: 4px;">
+                <!-- Separador Sutil -->
+                <hr class="my-4" style="border-top: 2px solid #dddddd;">
+
+                <!-- Fotografía de la Fachada (Escuela en general) -->
+                <div class="row g-4 align-items-center">
+                    <div class="col-md-6">
+                        <label class="form-label">Foto de la Fachada de la Escuela *</label>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-top: -5px; margin-bottom: 10px;">Suba una fotografía reciente de la entrada principal del plantel.</p>
+                        <input type="file" name="foto_fachada" class="form-control" accept="image/*" required>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="preview-box w-100 d-flex flex-column align-items-center justify-content-center" style="min-height: 140px; margin-top: 0;">
+                            <span id="preview-placeholder" class="text-muted" style="font-size: 0.95rem;">Vista previa de la fachada</span>
+                            <img id="vista-previa-img" src="#" alt="Foto seleccionada" style="max-width: 100%; max-height: 120px; display: none; border-radius: 4px;">
                         </div>
                     </div>
                 </div>
